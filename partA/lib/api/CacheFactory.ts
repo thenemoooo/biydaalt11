@@ -1,18 +1,27 @@
 import { ICache } from "./ICache";
+import { LRUCache } from "../impl/LRUCache";
+import { TTLCache } from "../impl/TTLCache";
 
-export enum CacheType {
-    LRU,
-    LFU,
-    TTL
+/**
+ * Кэш төрлүүд
+ */
+export enum CacheType { 
+    LRU, 
+    TTL 
 }
 
 /**
- * Кэш объект үүсгэх Factory класс.
- * Concrete хэрэгжүүлэлтүүдийг нуух зорилготой.
+ * Factory паттерн ашиглан бодит хэрэгжүүлэлтийг нуух класс [cite: 42]
  */
 export class CacheFactory {
-    public static createCache<T>(type: CacheType, capacity: number = 100): ICache<T> {
-        // Хэрэгжүүлэлтүүдийг маргааш нэмнэ
-        throw new Error("Implementation will be added in Day 3");
+    public static createCache<T>(type: CacheType, param: number = 100): ICache<T> {
+        switch (type) {
+            case CacheType.LRU: 
+                return new LRUCache<T>(param);
+            case CacheType.TTL: 
+                return new TTLCache<T>(param);
+            default: 
+                throw new Error("Unsupported cache type");
+        }
     }
 }
